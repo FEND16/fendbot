@@ -25,13 +25,6 @@ rtm.on(RTM_EVENTS.MESSAGE, function handleRtmMessage(message) {
   if(isBot(message.text)){
     
     const msg = message.text.toLowerCase();
-
-    if(msg.includes("sal")){
-      schema.getSearchPageURI()
-        .then(data => {
-          console.log(data);
-        })
-    }
     
     //XKCD
     if(msg.includes("xkcd")){
@@ -59,7 +52,7 @@ rtm.on(RTM_EVENTS.MESSAGE, function handleRtmMessage(message) {
 
     //weather
     if(msg.includes("weather")){
-      fetch(`https://api.darksky.net/forecast/3dfa4aa6d1f73a47e4c5993b7992fa7f/59.3293,2018.0686&lang=sv`)
+      fetch(`https://api.darksky.net/forecast/3dfa4aa6d1f73a47e4c5993b7992fa7f/59.3293,18.0686?lang=sv`)
         .then(res => res.json())
         .then(data => {
           rtm.sendMessage(data.currently.summary, message.channel);
