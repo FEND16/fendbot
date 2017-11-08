@@ -4,11 +4,14 @@ const WebClient = require('@slack/client').WebClient;
 const CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
 const RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 const fetch = require('isomorphic-fetch');
+const TimeEdit = require('timeedit-api');
 const { BEER } = require('./constants');
 const token = process.env.SLACK_BOT_TOKEN || '';
 
 const rtm = new RtmClient(token);
 const web = new WebClient(token);
+const schema = new TimeEdit('https://se.timeedit.net/web/nackademin/db1/1');
+
 
 
 rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, (rtmStartData) => {
@@ -17,11 +20,18 @@ rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, (rtmStartData) => {
 
 
 rtm.on(RTM_EVENTS.MESSAGE, function handleRtmMessage(message) {
-  
+  console.log(message);
   //Check if bot is being called
   if(isBot(message.text)){
     
     const msg = message.text.toLowerCase();
+
+    if(msg.includes("sal")){
+      schema.getSearchPageURI()
+        .then(data => {
+          console.log(data);
+        })
+    }
     
     //XKCD
     if(msg.includes("xkcd")){
@@ -72,5 +82,5 @@ rtm.start();
 
 
 function isBot(text){
-  return (text && text.includes("U7NAAMVSB"))
+  return (text && text.includes("U7WJ8CWC9"))
 }
