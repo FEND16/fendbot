@@ -130,7 +130,7 @@ csv-generate@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/csv-generate/-/csv-generate-2.0.0.tgz#ab4fdc30db5ce678b07d53884c69fa545618b25c"
 
-csv-parse@^2.0.0:
+csv-parse@2.0.0, csv-parse@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-2.0.0.tgz#4ea22c973233987f07688c601a2d460234ff56d1"
 

@@ -5,7 +5,7 @@ const CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
 const RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 const fetch = require('isomorphic-fetch');
 const CronJob = require('cron').CronJob;
-const csv = require('csv');
+const parse = require('csv-parse');
 const { BEER } = require('./constants');
 const token = process.env.SLACK_BOT_TOKEN || '';
 
@@ -17,7 +17,7 @@ fetch(`https://se.timeedit.net/web/nackademin/db1/1/ri105v5y1550Z6QY50Q3QYgXZQ02
   .then(res => res.text())
   .then(data => {
     console.log(data);
-    csv.parse(data, (error, parsedCsv) => {
+    parse(data, (error, parsedCsv) => {
       schema = parsedCsv;
       console.log(schema);
   })
