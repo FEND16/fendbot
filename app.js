@@ -4,11 +4,38 @@ const WebClient = require('@slack/client').WebClient;
 const CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
 const RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 const fetch = require('isomorphic-fetch');
+const CronJob = require('cron').CronJob;
+const csv = require('csv');
 const { BEER } = require('./constants');
 const token = process.env.SLACK_BOT_TOKEN || '';
 
 const rtm = new RtmClient(token);
 const web = new WebClient(token);
+var schema = {};
+
+fetch(`https://se.timeedit.net/web/nackademin/db1/1/ri105v5y1550Z6QY50Q3QYgXZQ0203Y1757.csv`)
+  .then(res => res.text())
+  .then(data => {
+    console.log(data);
+    csv.parse(data, (error, parsedCsv) => {
+      schema = parsedCsv;
+      console.log(schema);
+  })
+})
+
+const job = new CronJob('00 30 08 * * 1-5', () => {
+  fetch(`https://se.timeedit.net/web/nackademin/db1/1/ri105v5y1550Z6QY50Q3QYgXZQ0203Y1757.csv`)
+    .then(data => {
+      csv.parse(data, (error, parsedCsv) => {
+        schema = parsedCsv;
+        console.log(schema);
+      })
+    })
+  }, () => {
+    /* This function is executed when the job stops */
+  },
+  true
+);
 
 
 rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, (rtmStartData) => {
