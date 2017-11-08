@@ -17,7 +17,8 @@ fetch(`https://se.timeedit.net/web/nackademin/db1/1/ri105v5y1550Z6QY50Q3QYgXZQ02
   .then(res => res.text())
   .then(data => {
     console.log(data);
-    parse(data, (error, parsedCsv) => {
+    parse(data, { relax_column_count: true, trim: true}, (error, parsedCsv) => {
+      if(error) console.log(error);
       schema = parsedCsv;
       console.log(schema);
   })
@@ -28,7 +29,6 @@ const job = new CronJob('00 30 08 * * 1-5', () => {
     .then(data => {
       csv.parse(data, (error, parsedCsv) => {
         schema = parsedCsv;
-        console.log(schema);
       })
     })
   }, () => {
@@ -49,7 +49,22 @@ rtm.on(RTM_EVENTS.MESSAGE, function handleRtmMessage(message) {
   if(isBot(message.text)){
     
     const msg = message.text.toLowerCase();
-    
+
+    if(msg.includes("sal") && msg.includes("imorgon")){  
+      const currentDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000); 
+      const today = currentDate.toISOString().slice(0,10);
+      const currentSchema = schema.filter(day => day[0] == today);
+      if(currentSchema.length > 0){
+        rtm.sendMessage(`FM: ${currentSchema[0][6]}, EM: ${currentSchema[1][6]}`, message.channel);
+      }
+    }
+    if(msg.includes("sal")){  
+      const today = (new Date).toISOString().slice(0,10);
+      const currentSchema = schema.filter(day => day[0] == today);
+      if(currentSchema.length > 0){
+        rtm.sendMessage(`FM: ${currentSchema[0][6]}, EM: ${currentSchema[1][6]}`, message.channel);
+      }
+    } 
     //XKCD
     if(msg.includes("xkcd")){
       const rand = Math.floor(Math.random() * 500) + 1        
